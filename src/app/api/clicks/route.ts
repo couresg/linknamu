@@ -19,14 +19,23 @@ async function getCollection() {
 const notConfigured = () =>
   NextResponse.json({ error: "MONGODB_URI가 설정되지 않았습니다." }, { status: 503 });
 
+const dbError = (error: unknown) => {
+  console.error("[clicks] DB 오류:", error);
+  return NextResponse.json({ error: "클릭 수 DB에 연결할 수 없습니다." }, { status: 500 });
+};
+
 // 링크별 클릭 수 조회
 export async function GET() {
-  const collection = await getCollection();
-  if (!collection) return notConfigured();
+  try {
+    const collection = await getCollection();
+    if (!collection) return notConfigured();
 
-  const docs = await collection.find({}).toArray();
-  const counts = Object.fromEntries(docs.map((doc) => [doc.linkId, doc.count]));
-  return NextResponse.json(counts);
+    const docs = await collection.find({}).toArray();
+    const counts = Object.fromEntries(docs.map((doc) => [doc.linkId, doc.count]));
+    return NextResponse.json(counts);
+  } catch (error) {
+    return dbError(error);
+  }
 }
 
 // 링크 클릭 1회 기록
@@ -36,9 +45,13 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "잘못된 linkId입니다." }, { status: 400 });
   }
 
-  const collection = await getCollection();
-  if (!collection) return notConfigured();
+  try {
+    const collection = await getCollection();
+    if (!collection) return notConfigured();
 
-  await collection.updateOne({ linkId }, { $inc: { count: 1 } }, { upsert: true });
-  return NextResponse.json({ ok: true });
+    await collection.updateOne({ linkId }, { $inc: { count: 1 } }, { upsert: true });
+    return NextResponse.json({ ok: true });
+  } catch (error) {
+    return dbError(error);
+  }
 }

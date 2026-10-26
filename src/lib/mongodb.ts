@@ -12,7 +12,11 @@ export function getMongoClient(): Promise<MongoClient> | null {
   if (!uri) return null;
 
   if (!global._mongoClientPromise) {
-    global._mongoClientPromise = new MongoClient(uri).connect();
+    global._mongoClientPromise = new MongoClient(uri).connect().catch((error) => {
+      // 실패한 연결을 캐시에 남기면 재시작 전까지 계속 실패하므로 다음 요청에서 재시도
+      global._mongoClientPromise = undefined;
+      throw error;
+    });
   }
   return global._mongoClientPromise;
 }
