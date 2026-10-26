@@ -3,16 +3,32 @@
 @tailwind utilities;
 
 :root {
-  --background: #f5f7f4;
-  --foreground: #171717;
+  --background: #fdf6ee;
+  --foreground: #2b2420;
+  /* 크림 → 연한 살구색 그라데이션 + 은은한 빛 번짐 (글래스 카드 뒤에 깔리는 배경) */
+  --backdrop: radial-gradient(60% 45% at 15% 5%, rgba(255, 226, 200, 0.9), transparent 70%),
+    radial-gradient(55% 45% at 90% 85%, rgba(255, 196, 168, 0.55), transparent 70%),
+    linear-gradient(165deg, #fffaf3 0%, #fdeee0 55%, #fbe3d2 100%);
 }
 
 .dark {
-  --background: #0f1411;
-  --foreground: #ededed;
+  --background: #1b1512;
+  --foreground: #f3ece6;
+  --backdrop: radial-gradient(60% 45% at 15% 5%, rgba(255, 170, 120, 0.14), transparent 70%),
+    radial-gradient(55% 45% at 90% 85%, rgba(230, 120, 90, 0.12), transparent 70%),
+    linear-gradient(165deg, #1e1714 0%, #221914 55%, #2a1d17 100%);
 }
 
 body {
   color: var(--foreground);
   background: var(--background);
+}
+
+/* background-attachment: fixed는 iOS에서 무시되므로 고정 레이어로 대체 */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background: var(--backdrop);
 }

@@ -19,7 +19,7 @@ export default function LinkCard({ id, title, url }: LinkCardProps) {
       target="_blank"
       rel="noopener noreferrer"
       onClick={handleClick}
-      className="block w-full rounded-2xl border border-neutral-200 bg-white px-5 py-4 text-center font-medium shadow-sm transition hover:-translate-y-0.5 hover:border-emerald-500 hover:shadow-md dark:border-neutral-700 dark:bg-neutral-900 dark:hover:border-emerald-400"
+      className="block w-full rounded-2xl border border-white/70 bg-white/50 px-6 py-[18px] text-center text-[15px] font-semibold text-stone-800 shadow-[0_6px_24px_-12px_rgba(120,70,40,0.25)] backdrop-blur-xl transition duration-200 ease-out hover:-translate-y-px hover:bg-white/70 hover:shadow-[0_10px_28px_-12px_rgba(120,70,40,0.32)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-300 dark:border-white/10 dark:bg-white/[0.06] dark:text-stone-100 dark:shadow-[0_6px_24px_-12px_rgba(0,0,0,0.6)] dark:hover:bg-white/10"
     >
       {title}
     </a>
